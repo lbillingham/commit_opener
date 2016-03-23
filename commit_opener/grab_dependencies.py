@@ -78,7 +78,7 @@ def find_imports(text):
               ]
     import_list = []          
     for myregex in reexps:
-        for line in text.split():
+        for line in text:
             print line
             if 'import' in line:
                 print line
