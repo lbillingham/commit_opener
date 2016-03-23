@@ -57,7 +57,7 @@ def main(repo, out_dir, clobber_output, verbose):
     contributor_data = author_minded(repo)
     citation_data = pmc_data('SPSS')
     logging.info("output path: %s" % os.path.join(out_dir,'contributor_data.json'))
-    contributor_data.to_json(os.path.join(out_dir,'contributor_data.json'))
+    contributor_data.to_json(os.path.join(out_dir,'contributor_data.json'), date_format='iso')
     citation_data['citations'].to_json(os.path.join(out_dir,'citation_data.json'))
 
 if __name__ == '__main__':
