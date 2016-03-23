@@ -11,7 +11,7 @@ Tests for `commit_opener` module.
 import commit_opener.grab_dependencies as co_grab
 
 
-def test_import_search(self):
+def test_import_search():
     text = """
 import os
 import scipy
@@ -22,7 +22,7 @@ import matplotlib.pyplot as plt
     expected = ['os', 'scipy', 'numpy', 'matplotlib']
     assert expected == co_grab.find_imports(text)
     
-def test_commented(self):
+def test_commented():
     text = """
 import os
 #import scipy
@@ -30,7 +30,7 @@ import os
     expected = ['os']
     assert expected == co_grab.find_imports(text)
     
-def test_indented(self):
+def test_indented():
     text = """
 import os
 import scipy
