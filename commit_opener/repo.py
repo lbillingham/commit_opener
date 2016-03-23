@@ -36,22 +36,33 @@ class Repo(object):
         
     def extract_local_copy(self):
         """Extract a local copy of the repository"""
-        
-        self.tmpdir = tempfile.mkdtemp()
-        self.local_resources.append(self.tmpdir)
-        if self.rtype is "git":
-            extract_cmd = "git clone {url} {odir}".format(url=self.url,
-                                                          odir=self.tmpdir)
+        if "http" not in self.url:
+            if os.path.exists(self.url):
+                print("Repository exists locally")
+                self.tmpdir = self.url
+                self.extracted = True
+                return
+            else:
+                raise IOError("Path to repository doesn't exist")
+                
         else:
-            # We could implement SVN here, a quick svn export would do.
-            raise NotImplemented
-            
-        try:
-            subprocess.check_call(extract_cmd.split())
-        except subprocess.CalledProcessError:
-            raise IOError("Unable to extract a local copy of repository")
-        else:
-            self.extracted = True
+            print("Extracting local copy of repository")
+            self.tmpdir = tempfile.mkdtemp()
+            self.local_resources.append(self.tmpdir)
+            print("Created temporary directory")
+            if self.rtype is "git":
+                extract_cmd = "git clone {url} {odir}".format(url=self.url,
+                                                              odir=self.tmpdir)
+            else:
+                # We could implement SVN here, a quick svn export would do.
+                raise NotImplemented
+                
+            try:
+                subprocess.check_call(extract_cmd.split())
+            except subprocess.CalledProcessError:
+                raise IOError("Unable to extract a local copy of repository")
+            else:
+                self.extracted = True
     
     def has(self, filename):
         """
