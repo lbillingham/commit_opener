@@ -40,7 +40,7 @@ import scipy
 """
     expected = ['os']
     print co_grab.find_imports(text)
-    assert expected == find_imports(text)
+    assert expected == co_grab.find_imports(text)
     
 test_import_search()
 test_commented()
