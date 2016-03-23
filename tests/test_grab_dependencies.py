@@ -20,6 +20,7 @@ from numpy import something
 import matplotlib.pyplot as plt
 """
     expected = ['os', 'scipy', 'numpy', 'matplotlib']
+    print co_grab.find_imports(text)
     assert expected == co_grab.find_imports(text)
     
 def test_commented():
@@ -28,6 +29,7 @@ import os
 #import scipy
 """
     expected = ['os']
+    print co_grab.find_imports(text)
     assert expected == co_grab.find_imports(text)
     
 def test_indented():
@@ -36,5 +38,6 @@ import os
 import scipy
 """
     expected = ['os']
+    print co_grab.find_imports(text)
     assert expected == find_imports(text)
     
