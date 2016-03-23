@@ -61,7 +61,7 @@ def parse_setup_py(contents):
         except AttributeError:
             continue
 
-return sorted(ret)
+    return sorted(ret)
 
 
 
