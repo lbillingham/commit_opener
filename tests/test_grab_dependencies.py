@@ -36,7 +36,7 @@ import os
 def test_indented():
     text = """
 import os
-import scipy
+    import scipy
 """
     expected = ['os']
     print co_grab.find_imports(text)
