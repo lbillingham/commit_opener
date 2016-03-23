@@ -83,5 +83,5 @@ def find_imports(text):
         for line in text:
             if 'import' in line:
                 print "blah", line
-                import_list.append(re.match(myregex, text).group(1))
+                import_list.append(re.match(myregex, line).group(1))
     return import_list
