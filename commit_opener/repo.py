@@ -90,6 +90,7 @@ class Repo(object):
         
         for root, dirs, files in os.walk(self.tmpdir, topdown=True):
             for name in files:
+                print os.path.join(root, name)
                 self.file_list.append(os.path.join(root, name))
         
             
