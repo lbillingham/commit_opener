@@ -63,7 +63,7 @@ def search_files_for_imports(repo_instance):
     dep_list = []
     for f in repo_instance.file_list:
         if ".py" in f:
-            print("Looking in {} for imports".format(os.basename(f))) 
+            print("Looking in {} for imports".format(os.path.basename(f))) 
             filetext = catfile(f)
             dep_list.extend(find_imports(filetext))
 
