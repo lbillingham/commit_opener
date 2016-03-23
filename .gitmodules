@@ -1,0 +1,3 @@
+[submodule "depsy"]
+	path = depsy
+	url = https://github.com/Impactstory/depsy
