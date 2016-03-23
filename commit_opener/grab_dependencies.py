@@ -5,10 +5,14 @@ Issue:
 work out dependencies #3
 https://github.com/lbillingham/commit_opener/issues/3
 
+The key function is get_dependencies().
+
 """
 import re
 
-import depsy.models
+# THis is an import depsy, but it's not a proper package.
+import models as depsymodels
+
 import commit_opener.repo
 
 def catfile(filename):
@@ -20,7 +24,10 @@ def catfile(filename):
     
 
 def get_dependencies(name, url):
+    """
+    Get the dependecies for a git repository or any local python package.
     
+    """
     # Let's instantiate the repo object, so we can parse through it.
     myrepo = commit_opener.repo.Repo(name, url)
     print("Created a repository instance for {}".format(url)) 
@@ -34,11 +41,11 @@ def get_dependencies(name, url):
     if myrepo.has("requirements.txt"):
         print("Repository has a requirements.txt file")
         filetext = catfile(myrepo.has("requirements.txt"))    
-        reqs = depsy.models.python(filetext)
+        reqs = depsymodels.python(filetext)
     elif myrepo.has("setup.py"):
         print("Repository has a setup.py file")
         filetext = catfile(myrepo.has("setup.py"))    
-        reqs = depsy.models.parse_setup_py(filetext)
+        reqs = depsymodels.parse_setup_py(filetext)
     else:
         # No standard descriptions of the dependencies so let's try to work 
         # them out for ourselves.
