@@ -5,6 +5,7 @@ import pandas as pd
 from shutil import rmtree
 
 from . tree_scrape import author_minded
+from . query_pmc import pmc_data
 
 OUT_SUBFOLDER = 'contrib_data'
 AUTHOR_DATA = 'author_data.json'
@@ -54,8 +55,10 @@ def main(repo, out_dir, clobber_output, verbose):
     repo_name = os.path.basename(repo)
     make_output_folder(out_dir, overwrite=clobber_output)
     contributor_data = author_minded(repo)
+    citation_data = pmc_data('SPSS')
     logging.info("output path: %s" % os.path.join(out_dir,'contributor_data.json'))
     contributor_data.to_json(os.path.join(out_dir,'contributor_data.json'))
+    citation_data['citations'].to_json(os.path.join(out_dir,'citation_data.json'))
 
 if __name__ == '__main__':
     main()
