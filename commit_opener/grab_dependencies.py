@@ -81,7 +81,7 @@ def find_imports(text):
     for myregex in reexps:
         for line in text:
             try:
-                import_list.append(re.match(myregex, line).group(1))
+                import_list.append(re.search(myregex, line).group(1))
             except AttributeError:
                 pass
     return import_list
