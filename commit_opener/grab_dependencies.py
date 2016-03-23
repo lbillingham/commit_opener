@@ -9,7 +9,7 @@ The key function is get_dependencies().
 
 """
 import re
-
+import os
 import depsy
 
 #import commit_opener.repo

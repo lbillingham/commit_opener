@@ -7,6 +7,7 @@ import tempfile
 import shutil
 import subprocess
 import os
+import os.path
 
 class Repo(object):
     """
