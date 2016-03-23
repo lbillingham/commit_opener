@@ -20,7 +20,8 @@ def catfile(filename):
     
     with open(filename, 'r') as fhandle:
         print("Opening file {} and reading contents".format(filename))
-        return fhandle.read()
+        text = fhandle.readlines()
+    return text
     
 
 def get_dependencies(name, url):
@@ -81,6 +82,6 @@ def find_imports(text):
         print text
         for line in text:
             if 'import' in line:
-                print line
+                print "blah", line
                 import_list.append(re.match(myregex, text).group(1))
     return import_list
