@@ -73,8 +73,8 @@ def search_files_for_imports(repo_instance):
 def find_imports(text):
     """Apply regular expression searching to a file"""
     # list of regexes
-    reexps = [re.compile(r'^\w+import\s+(\w+)', re.MULTILINE),
-              re.compile(r'^\w+from\s+(\w+)', re.MULTILINE)
+    reexps = [re.compile(r'^\s+import\s+(\w+)', re.MULTILINE),
+              re.compile(r'^\s+from\s+(\w+)', re.MULTILINE)
               ]
     import_list = []          
     for myregex in reexps:
