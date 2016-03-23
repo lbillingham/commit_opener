@@ -48,7 +48,7 @@ def main(repo, out_dir, clobber_output, verbose):
         logging.info("Repo located at %s" % repo)
 
     if out_dir is None:
-        out_dir = getcwd()
+        out_dir = os.path.join(os.getcwd(), OUT_SUBFOLDER)
 
     verify_local_repo_location(repo)
     repo_name = os.path.basename(repo)
