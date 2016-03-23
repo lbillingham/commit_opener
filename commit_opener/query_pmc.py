@@ -46,16 +46,14 @@ def dict_to_df(_dict):
     for d in _dict:
         for k, v in d.items():
             result[k].append(v)
-    return result
+    return pd.DataFrame(result)
 
-def pmc_data(_search_string, _pages4citations=10):
-    # resp = pmc_query(_search_string, _type="search", _page_size=_pages4citations)
-    resp = pmc_query(_search_string, _type="search")
+def pmc_data(_search_string, _page_size=10):
+    resp = pmc_query(_search_string, _type="search", _page_size=_page_size)
+    # resp = pmc_query(_search_string, _type="search")
     pmc_hits = resp["hitCount"]
     pmc_citations = pmc_field_filter(resp)
     pmc_citations = dict_to_df(pmc_citations)
     return {"hits":pmc_hits, "citations":pmc_citations}
 
-
-# print pmc_data("spss")
 
