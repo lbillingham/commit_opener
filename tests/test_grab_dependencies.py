@@ -19,7 +19,8 @@ import pandas
 from numpy import something
 import matplotlib.pyplot as plt
 """
-    expected = ['os', 'scipy', 'pandas', 'numpy', 'matplotlib']
+    # Ordering matters here. Normal imports done first, then froms.
+    expected = ['os', 'scipy', 'pandas', 'matplotlib', 'numpy']
     print co_grab.find_imports(text)
     assert expected == co_grab.find_imports(text)
     
