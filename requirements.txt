@@ -1,0 +1,4 @@
+GitPython
+git-pandas
+numpy
+pandas
