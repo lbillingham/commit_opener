@@ -1,5 +1,11 @@
 # Query PMC
+# README
+# Just pass a search string - will return a dictionary
+#   hits: number of hits
+#   citations: a dataframe of the first n hits with weights
+#       for the number of times they have been cited
 # - [ ] TODO(2016-03-23): returns 1st 1000 only
+
 import pandas as pd
 import json
 import requests
@@ -42,35 +48,14 @@ def dict_to_df(_dict):
             result[k].append(v)
     return result
 
-def pmc_data(_search_string):
-    resp = pmc_query(_search_string, _type="profile")
-    pmc_hits = 
+def pmc_data(_search_string, _pages4citations=10):
+    # resp = pmc_query(_search_string, _type="search", _page_size=_pages4citations)
     resp = pmc_query(_search_string, _type="search")
+    pmc_hits = resp["hitCount"]
     pmc_citations = pmc_field_filter(resp)
-print pmc_citations
+    pmc_citations = dict_to_df(pmc_citations)
+    return {"hits":pmc_hits, "citations":pmc_citations}
 
-dict_to_df(pmc_citations)
 
-resp = pmc_query("spss", _type="profile")
-print json.dumps(resp, ensure_ascii=True, indent=4)
+# print pmc_data("spss")
 
-    
-# pd.DataFrame(result["citedByCount"], index=result["id"])
-df = pd.DataFrame(result)
-
-# Check number from profile
-
-# Run a search
-resp = pmc_query("spss", _type="search")
-print json.dumps(resp, ensure_ascii=True, indent=4)
-
-# print pmc_field_filter(resp)
-# print len(pmc_field_filter(resp))
-pmc_citations = pmc_field_filter(resp)
-print pmc_citations
-
-dict_to_df(pmc_citations)
-
-return df
-
-if __name__ == "__main__":
