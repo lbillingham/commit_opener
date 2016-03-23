@@ -34,20 +34,35 @@ def make_output_folder(path_, overwrite):
 
 
 @click.command()
-@click.option('--repo_dir', prompt='git repository location', help='path to folder containing  .git repository')
+@click.option('--repo', prompt='git repository location', help='path to folder containing .git repository or url')
 @click.option('--out_dir', default=None,
     help='parent dir for output data, default same as .git folder scraped')
 @click.option('--clobber_output', default=True,
         help='should we overwrite existing data?, default True')
+@click.option('--verbose/--no-verbose', default=False)
 
-def main(repo_dir, out_dir, clobber_output):
+def main(repo, out_dir, clobber_output, verbose):
     """  """
-    verify_local_repo_location(repo_dir)
-    repo_name = os.path.basename(repo_dir)
-    outpath = build_out_path(repo_dir, out_dir)
-    make_output_folder(outpath, overwrite=clobber_output)
-    contributor_data = author_minded(repo_dir)
-    contributor_data.to_json(os.path.join(outpath,'contributor_data.json'))
+    import logging
+    from gitpandas import Repository
+    if verbose:
+        logging.getLogger().setLevel(10)
+
+    if repo.find("git@") == 0:
+        logging.info("Cloning repo %s" % repo)
+        repository = Repository(working_dir=repo)
+        repo = repository.git_dir
+        logging.info("Repo located at %s" % repo)
+
+    if out_dir is None:
+        out_dir = getcwd()
+
+    verify_local_repo_location(repo)
+    repo_name = os.path.basename(repo)
+    make_output_folder(out_dir, overwrite=clobber_output)
+    contributor_data = author_minded(repo)
+    logging.info("output path: %s" % os.path.join(out_dir,'contributor_data.json'))
+    contributor_data.to_json(os.path.join(out_dir,'contributor_data.json'))
 
 
 if __name__ == '__main__':
