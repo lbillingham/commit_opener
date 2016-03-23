@@ -79,10 +79,8 @@ def find_imports(text):
               ]
     import_list = []          
     for myregex in reexps:
-        print text
         for line in text:
             if 'import' in line:
-                print "blah", line
                 try:
                     import_list.append(re.match(myregex, line).group(1))
                 except AttributeError:
