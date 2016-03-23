@@ -1,5 +1,4 @@
 import re
-import requests
 import pickle
 import ast
 from pathlib import Path
