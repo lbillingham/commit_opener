@@ -13,7 +13,8 @@ import re
 # THis is an import depsy, but it's not a proper package.
 import models as depsymodels
 
-import commit_opener.repo
+#import commit_opener.repo
+import repo
 
 def catfile(filename):
     """Get text contents of a file."""
