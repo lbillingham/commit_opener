@@ -1,8 +1,12 @@
-def author_minded(working_dir):
+def author_minded(working_dir, frequency=None):
     from numpy import median, min, max, diff, nan, timedelta64
     from pandas import DataFrame
     from gitpandas import Repository
     from itertools import groupby
+
+    if frequency is None:
+        frequency = timedelta64(0, 'D')
+
     repo = Repository(working_dir=working_dir)
     commits = repo.commit_history()
     authors = set(commits.author)
@@ -29,7 +33,7 @@ def author_minded(working_dir):
             result['max_dayly_commit_run'].append(
                 max([
                     len(list(u)) for k, u in groupby(deriv.astype('timedelta64[D]'))
-                    if k == timedelta64(0, 'D')
+                    if k <= frequency
                 ])
             )
 
