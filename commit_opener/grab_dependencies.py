@@ -35,7 +35,7 @@ def get_dependencies(name, url):
     # Extract a local copy
     myrepo.extract_local_copy()
     print("Local copy now available here: {}".format(myrepo.tmpdir))
-    print myrepo.file_list
+    myrepo._get_filelist()
 
     # Note: the file has to be opened and read before passing to depsy 
     # functions.
