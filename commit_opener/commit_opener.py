@@ -6,14 +6,8 @@ from shutil import rmtree
 
 from . tree_scrape import author_minded
 
-FAKE_CONTRIB_DATA = pd.Series(
-    index=['J. Doe'],
-    data={'1st':pd.datetime(2000, 1, 1),
-          'last':pd.datetime.now(),
-          'fraction':0.98}
-)
-
-OUT_FOLDER = 'contrib_data'
+OUT_SUBFOLDER = 'contrib_data'
+AUTHOR_DATA = 'author_data.json'
 
 def verify_local_repo_location(repo):
     if not os.path.isdir(repo):
@@ -22,7 +16,7 @@ def verify_local_repo_location(repo):
 def build_out_path(repo_name, parent_path=None):
     if parent_path is None:
         parent_path = os.path.abspath(os.curdir)
-    out_path = os.path.join(parent_path, repo_name, OUT_FOLDER)
+    out_path = os.path.join(parent_path, repo_name, OUT_SUBFOLDER)
     return out_path
 
 def make_output_folder(path_, overwrite):
@@ -31,7 +25,6 @@ def make_output_folder(path_, overwrite):
     else:
         rmtree(path_)
         os.mkdir(path_)
-
 
 @click.command()
 @click.option('--repo', prompt='git repository location', help='path to folder containing .git repository or url')
@@ -63,7 +56,6 @@ def main(repo, out_dir, clobber_output, verbose):
     contributor_data = author_minded(repo)
     logging.info("output path: %s" % os.path.join(out_dir,'contributor_data.json'))
     contributor_data.to_json(os.path.join(out_dir,'contributor_data.json'))
-
 
 if __name__ == '__main__':
     main()
