@@ -74,8 +74,8 @@ def search_files_for_imports(repo_instance):
 def find_imports(text):
     """Apply regular expression searching to a file"""
     # list of regexes. Strat of line "^" doesn't work for some reason.
-    reexps = [re.compile(r'import\s+(\w+)'),
-              re.compile(r'from\s+(\w+)')
+    reexps = [re.compile(r'import (\w+)'),
+              re.compile(r'from (\w+) import')
               ]
     import_list = []          
     for myregex in reexps:
