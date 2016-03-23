@@ -14,13 +14,8 @@ with open('README.rst') as readme_file:
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
-requirements = [
-    # TODO: put package requirements here
-]
-
-test_requirements = [
-    # TODO: put package test requirements here
-]
+requirements = open('requirements.txt').readlines()
+test_requirements = open('requirements_dev.txt').readlines()
 
 setup(
     name='commit_opener',
