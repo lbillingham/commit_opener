@@ -11,6 +11,7 @@ The key function is get_dependencies().
 import re
 import os
 import depsy
+import pandas
 
 #import commit_opener.repo
 import repo
@@ -55,6 +56,14 @@ def get_dependencies(name, url):
     reqs = search_files_for_imports(myrepo)
 
     print("Found the following imports: {}".format("\n".join(reqs)))
+    
+
+    data = pd.Series(reqs)
+    data = data.unique()
+    data.sort_values(inplace=True)
+    return data
+    
+    
 
 def search_files_for_imports(repo_instance):
     """
