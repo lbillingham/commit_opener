@@ -19,7 +19,7 @@ import pandas
 from numpy import something
 import matplotlib.pyplot as plt
 """
-    expected = ['os', 'scipy', 'numpy', 'matplotlib']
+    expected = ['os', 'scipy', 'pandas', 'numpy', 'matplotlib']
     print co_grab.find_imports(text)
     assert expected == co_grab.find_imports(text)
     
@@ -40,4 +40,9 @@ import scipy
     expected = ['os']
     print co_grab.find_imports(text)
     assert expected == find_imports(text)
+    
+test_import_search()
+test_commented()
+test_indented()
+
     
