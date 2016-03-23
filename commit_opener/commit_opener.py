@@ -34,22 +34,19 @@ def make_output_folder(path_, overwrite):
 
 
 @click.command()
-@click.option('--repo', prompt='git repository location', help='path to git repository')
+@click.option('--repo_dir', prompt='git repository location', help='path to folder containing  .git repository')
 @click.option('--out_dir', default=None,
     help='parent dir for output data, default same as .git folder scraped')
 @click.option('--clobber_output', default=True,
         help='should we overwrite existing data?, default True')
 
-def main(repo, out_dir, clobber_output):
+def main(repo_dir, out_dir, clobber_output):
     """  """
-    verify_local_repo_location(repo)
-    repo_name = os.path.basename(repo)
-    outpath = build_out_path(repo, out_dir)
-    print('making output folder {}'.format(outpath))
-
+    verify_local_repo_location(repo_dir)
+    repo_name = os.path.basename(repo_dir)
+    outpath = build_out_path(repo_dir, out_dir)
     make_output_folder(outpath, overwrite=clobber_output)
-    print('scraping contribs {}'.format(outpath))
-    contributor_data = author_minded(repo_name)
+    contributor_data = author_minded(repo_dir)
     contributor_data.to_json(os.path.join(outpath,'contributor_data.json'))
 
 
