@@ -2,6 +2,9 @@
 import click
 import os
 import pandas as pd
+from shutil import rmtree
+
+from . tree_scrape import author_minded
 
 FAKE_CONTRIB_DATA = pd.Series(
     index=['J. Doe'],
@@ -16,23 +19,38 @@ def verify_local_repo_location(repo):
     if not os.path.isdir(repo):
         raise IOError('could not locate repository {}'.format(repo))
 
+def build_out_path(repo_name, parent_path=None):
+    if parent_path is None:
+        parent_path = os.path.abspath(os.curdir)
+    out_path = os.path.join(parent_path, repo_name, OUT_FOLDER)
+    return out_path
 
-def make_output_folder(repo_name, out_path=None):
-    if out_path is None:
-        out_path = os.path.abspath(os.curdir)
-    if not os.path.isdir(out_path):
-        raise IOError('could not locate output folder {}'.format(out_path))
-    os.mkdir(os.path.join(out_path, repo_name, OUT_FOLDER))
+def make_output_folder(path_, overwrite):
+    if not os.path.exists(path_):
+        os.mkdir(path_)
+    else:
+        rmtree(path_)
+        os.mkdir(path_)
 
 
 @click.command()
 @click.option('--repo', prompt='git repository location', help='path to git repository')
-def main(repo):
+@click.option('--out_dir', default=None,
+    help='parent dir for output data, default same as .git folder scraped')
+@click.option('--clobber_output', default=True,
+        help='should we overwrite existing data?, default True')
+
+def main(repo, out_dir, clobber_output):
     """  """
     verify_local_repo_location(repo)
     repo_name = os.path.basename(repo)
-    make_output_folder(repo_name)
-    contributor_data = FAKE_CONTRIB_DATA
+    outpath = build_out_path(repo, out_dir)
+    print('making output folder {}'.format(outpath))
+
+    make_output_folder(outpath, overwrite=clobber_output)
+    print('scraping contribs {}'.format(outpath))
+    contributor_data = author_minded(repo_name)
+    contributor_data.to_json(os.path.join(outpath,'contributor_data.json'))
 
 
 if __name__ == '__main__':
