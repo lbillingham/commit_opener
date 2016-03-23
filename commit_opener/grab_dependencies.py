@@ -10,8 +10,7 @@ The key function is get_dependencies().
 """
 import re
 
-# THis is an import depsy, but it's not a proper package.
-import models as depsymodels
+import depsy
 
 #import commit_opener.repo
 import repo
@@ -42,11 +41,11 @@ def get_dependencies(name, url):
     if myrepo.has("requirements.txt"):
         print("Repository has a requirements.txt file")
         filetext = catfile(myrepo.has("requirements.txt"))    
-        reqs = depsymodels.python(filetext)
+        reqs = depsy.parse_requirements_txt(filetext)
     elif myrepo.has("setup.py"):
         print("Repository has a setup.py file")
         filetext = catfile(myrepo.has("setup.py"))    
-        reqs = depsymodels.parse_setup_py(filetext)
+        reqs = depsy.parse_setup_py(filetext)
     else:
         # No standard descriptions of the dependencies so let's try to work 
         # them out for ourselves.
