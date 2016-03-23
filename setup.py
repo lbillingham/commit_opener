@@ -35,6 +35,11 @@ setup(
     ],
     package_dir={'commit_opener':
                  'commit_opener'},
+    entry_points={
+        'console_scripts': [
+            'commit_opener=commit_opener.commit_opener:main'
+        ]
+    },
     include_package_data=True,
     install_requires=requirements,
     license="GPL",
