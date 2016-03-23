@@ -7,40 +7,32 @@ https://github.com/lbillingham/commit_opener/issues/3
 
 """
 
+def catfile(filename):
+    """Get text contents of a file."""
+    
+    with open(filename, 'r') as fhandle:
+        return "\n".join(fhandle.read())
+    
+
 def get_dependencies(name, url):
     
     # Let's instantiate the repo object, so we can parse through it.
     myrepo = repo.Repo(name, url)
     
-    
+    # Extract a local copy
+    myrepo.extract_local_copy()
 
-
-
-def reqs_from_file(contents, file_type=None):
-    """
-    Original depsy.models.python 
-    
-    Taken a copy to implement searching for import statements.
-    
-    """
-    if file_type is None:
-        # we can auto-detect the file type prolly, but don't need to yet.
-        pass
-    
-    if contents is None:
-        return []
-    
-    if file_type == "requirements.txt":
-        return parse_requirements_txt(contents)
-    
-    elif file_type == "setup.py":
-        try:
-            return parse_setup_py(contents)
-        except SyntaxError:
-            # we couldn't read the file.
-            print "\n******  setup.py parse error!  ******\n"
-            return []
+    # Note: the file has to be opened and read before passing to depsy 
+    # functions.
+    if myrepo.has("requirements.txt"):
+        filetext = catfile(myrepo.has("requirements.txt"))    
+        reqs = depsy.models.python(filetext)
+    elif myrepo.has("setup.py"):
+        filetext = catfile(myrepo.has("setup.py"))    
+        reqs = depsy.models.parse_setup_py(filetext)
     else:
-        # Neither the requirements.txt nor setup.py exist
-        # Let's export the repo and do a quick text search
-        
+        # No standard descriptions of the dependencies so let's try to work 
+        # them out for ourselves.
+        pass
+
+

@@ -54,8 +54,11 @@ class Repo(object):
             self.extracted = True
     
     def has(self, filename):
-        """Does the repository have a file matching a particular name"""
+        """
+        Does the repository have a file matching a particular name? If it does
+        then return the filename, otherwise return False.
         
+        """
         if not self.extracted:
             self.extract_local_copy()
             
@@ -65,6 +68,8 @@ class Repo(object):
         for f in self.file_list:
             if filename in f:
                 return f
+                
+        return False
             
     def _get_filelist(self):
         """Just get a list of the files in the repo."""
