@@ -21,7 +21,6 @@ import matplotlib.pyplot as plt
 """
     # Ordering matters here. Normal imports done first, then froms.
     expected = ['os', 'scipy', 'pandas', 'matplotlib', 'numpy']
-    print co_grab.find_imports(text)
     assert expected == co_grab.find_imports(text)
     
 def test_commented():
@@ -30,7 +29,6 @@ import os
 #import scipy
 """
     expected = ['os']
-    print co_grab.find_imports(text)
     assert expected == co_grab.find_imports(text)
     
 def test_indented():
@@ -39,11 +37,5 @@ import os
     import scipy
 """
     expected = ['os']
-    print co_grab.find_imports(text)
     assert expected == co_grab.find_imports(text)
-    
-test_import_search()
-test_commented()
-test_indented()
-
     
