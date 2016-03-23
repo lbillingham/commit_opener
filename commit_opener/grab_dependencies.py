@@ -30,7 +30,7 @@ def get_dependencies(name, url):
     
     """
     # Let's instantiate the repo object, so we can parse through it.
-    myrepo = commit_opener.repo.Repo(name, url)
+    myrepo = repo.Repo(name, url)
     print("Created a repository instance for {}".format(url)) 
     
     # Extract a local copy
