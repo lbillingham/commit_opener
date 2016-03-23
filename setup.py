@@ -14,8 +14,8 @@ with open('README.rst') as readme_file:
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
-requirements = [GitPython, git-pandas, numpy, pandas, click, sphinx, flake, sphinx]
-test_requirements = [pytest, tox]
+requirements = open('requirements.txt').readlines()
+test_requirements = open('requirements_dev.txt').readlines()
 
 setup(
     name='commit_opener',
