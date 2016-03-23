@@ -38,11 +38,12 @@ def get_dependencies(name, url):
 
     # Note: the file has to be opened and read before passing to depsy 
     # functions.
-    if myrepo.has("requirements.txt"):
-        print("Repository has a requirements.txt file")
-        filetext = catfile(myrepo.has("requirements.txt"))    
-        reqs = depsy.parse_requirements_txt(filetext)
-    elif myrepo.has("setup.py"):
+#    if myrepo.has("requirements.txt"):
+#        print("Repository has a requirements.txt file")
+#        filetext = catfile(myrepo.has("requirements.txt"))    
+#        reqs = depsy.parse_requirements_txt(filetext)
+#    elif myrepo.has("setup.py"):
+    if myrepo.has("setup.py"):
         print("Repository has a setup.py file")
         filetext = catfile(myrepo.has("setup.py"))    
         reqs = depsy.parse_setup_py(filetext)
