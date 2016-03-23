@@ -74,7 +74,7 @@ def find_imports(text):
     """Apply regular expression searching to a file"""
     # list of regexes
     reexps = [re.compile(r'^import\s+(\w+)[\s\.\w]+', re.MULTILINE),
-              re.compile(r'^from\s+(\w+)[\s\.\w]+import', re.MULTILINE)
+              re.compile(r'^from\s+(\w+)', re.MULTILINE)
               ]
     import_list = []          
     for myregex in reexps:
