@@ -54,7 +54,7 @@ def pmc_data(_search_string, _page_size=10):
     pmc_hits = resp["hitCount"]
     pmc_citations = pmc_field_filter(resp)
     pmc_citations = dict_to_df(pmc_citations)
-    pmc_citations = citations['citedByCount'].mean()
+    pmc_citations = pmc_citations['citedByCount'].mean()
     # Now count average number of hits
     return {"hits":pmc_hits, "citations":pmc_citations}
 
