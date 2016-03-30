@@ -21,7 +21,7 @@ def catfile(filename):
     
     with open(filename, 'r') as fhandle:
         print("Opening file {} and reading contents".format(filename))
-        text = fhandle.readlines()
+        text = fhandle.read()
     return text
     
 
@@ -55,11 +55,17 @@ def get_dependencies(name, url):
     print("No req or setup file, so determining dependencies ourselves.")
     reqs = search_files_for_imports(myrepo)
 
+    # Convert the list of requirements to a set.
+    reqs = set(reqs)
     print("Found the following imports: {}".format("\n".join(reqs)))
     
+    # Get the list of standard packages so that these can be removed.
+    stdlibs = depsy.PythonStandardLibs()
+    stdlibs.get() 
+    set_std_libs = set(stdlibs.libs)   
 
-    data = pd.Series(reqs)
-    data = data.unique()
+
+    data = pandas.Series(list(reqs-set_std_libs))
     data.sort_values(inplace=True)
     return data
     
@@ -82,15 +88,14 @@ def search_files_for_imports(repo_instance):
     
 def find_imports(text):
     """Apply regular expression searching to a file"""
-    # list of regexes. Strat of line "^" doesn't work for some reason.
-    reexps = [re.compile(r'import (\w+)'),
-              re.compile(r'from (\w+) import')
+    # list of regexes. 
+    reexps = [re.compile('^[\si]+mport\s+(\w+)[\s\.]', re.MULTILINE),
+              re.compile('^[\sf]+rom\s+(\w+)[\s\.]+', re.MULTILINE)
               ]
     import_list = []          
     for myregex in reexps:
-        for line in text:
-            try:
-                import_list.append(re.search(myregex, line).group(1))
-            except AttributeError:
-                pass
+        try:
+            import_list.extend(re.findall(myregex, text))
+        except AttributeError:
+            pass
     return import_list

@@ -1,9 +1,9 @@
 import re
 import pickle
 import ast
-
-
-
+import os.path
+import errno
+import requests
 
 """Functions from depsy"""
 def parse_requirements_txt(contents):
@@ -26,7 +26,7 @@ foo == 5.5
   foo_with_space_in_front = 1.1"""
 
     reqs = re.findall(
-        r'^(?!file:|-|\.)\s*([\w\.-]+)',
+        '^(?!file:|-|\.)\s*([\w\.-]+)',
         contents,
         re.MULTILINE | re.IGNORECASE
     )
@@ -62,5 +62,69 @@ def parse_setup_py(contents):
 
     return sorted(ret)
 
+class PythonStandardLibs():
 
+    def __init__(self):
+    	self.url = "https://docs.python.org/2.7/py-modindex.html"
+    	self.data_dir = os.path.join(os.path.dirname(__file__), 
+           	                     "../../data")
+
+        self.pickle_path = os.path.join(self.data_dir,
+                                        "python_standard_libs.pickle")
+        self.libs = None
+
+    def _mkdir(self):
+   	try:
+            os.makedirs(self.data_dir)
+    	except OSError as exp:
+            if exp.errno != errno.EEXIST:
+            	raise
+        self.pickle_path = os.path.join(self.data_dir, 
+                                        "python_standard_libs.pickle")
+
+    def retrieve_from_web(self):
+        # only needs to be used once ever, here for tidiness
+        # checked the result into source control as python_standard_libs.pickle
+        html = requests.get(self.url).text
+        exp = r'class="xref">([^<]+)'
+        matches = re.findall(exp, html)
+        self.libs = [m for m in matches if '.' not in m]
+
+    def pickle_libs(self):
+
+        if self.libs is None:
+            self.retrieve_from_web()
+
+        self._mkdir()
+        with open(self.pickle_path, "w") as f:
+            pickle.dump(self.libs, f)
+
+        print "saved these to file: {}".format(self.libs)
+
+    def get(self):
+        if self.libs is None:
+            try:
+                with open(self.pickle_path, "r") as f:
+                    print "Loading list of Stdandard Python Libraries from pickle file"
+                    self.libs = pickle.load(f)
+            except:
+                self.retrieve_from_web()
+                self.pickle_libs()
+
+    def clean(self):
+        try:
+            os.remove(self.pickle_path)
+        except:
+            pass
+
+def save_python_standard_libs(clean=False):
+    pystdlibs = PythonStandardLibs()
+    if clean:
+        pystdlibs.clean()
+    pystdlibs.get()
+
+    # to show the thing works
+    new_libs_obj = PythonStandardLibs()
+    new_libs_obj.get()
+    print "got these from pickled file: {}".format(new_libs_obj.libs)
 
