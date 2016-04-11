@@ -2,4 +2,5 @@ GitPython
 git-pandas
 numpy
 pandas
+requests
 click
