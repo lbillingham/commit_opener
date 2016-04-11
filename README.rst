@@ -45,20 +45,34 @@ Notes for use on windows with `conda`
 ------------------
 need to have both `git` and `pandas` installed. Pandas is a pain to install
 on windows without `conda`, `conda` does not play very nicely with [git bash](https://github.com/conda/conda/issues/747)
+
+make a conda environment (`pandas` (probably `numpy.sclapak`, actually)
+and normal `virtualenv` are not great together on windows)
+
 ```shell
 # in windows `cmd.exe`
 mkdir commit_opener
 git clone git@github.com:lbillingham/commit_opener.git ./commit_opener
 conda create -n commit_opener_env pandas
- ```
+```
+switch to using a `git` aware shell (if git not integrated into `cmd.exe`)
+to install `commit_opener` into the `conda env`.
 ```shell
 # in `git.bash`
 cd commit_opener
 export PATH=/c/Users/laurence/AppData/Local/Continuum/Anaconda3/envs/commit_opener_env:$PATH
 export PATH=/c/Users/laurence/AppData/Local/Continuum/Anaconda3/envs/commit_opener_env/Scripts:$PATH
 python setup.py install
-##########
+# run the `commit_opener` we just installed
 cd /c/tmp
 git clone git@github.com:Turbo87/utm
 commit_opener --repo ./utm
+```
+
+to uninstall
+```shell
+cd commit_opener
+export PATH=/c/Users/laurence/AppData/Local/Continuum/Anaconda3/envs/commit_opener_env:$PATH
+python setup.py --dry-run --record files.txt
+cat files.txt | sed 's/\\/\//g' | sed 's/['Cc']:/\/c/' | xargs rm -rf
 ```
