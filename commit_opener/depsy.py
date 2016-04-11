@@ -5,7 +5,9 @@ import os.path
 import errno
 import requests
 
-"""Functions from depsy"""
+# """Functions from depsy"""
+
+
 def parse_requirements_txt(contents):
     # see here for spec used in parsing the file:
     # https://pip.readthedocs.org/en/1.1/requirements.html#the-requirements-file-format
@@ -41,45 +43,46 @@ def parse_setup_py(contents):
         try:
             if node.func.id == "setup":
                 for keyword in node.keywords:
-                    if keyword.arg=="install_requires":
-                        print "found requirements in setup.py 'install_requires' arg"
+                    if keyword.arg == "install_requires":
+                        print("found requirements in setup.py 'install_requires' arg")
                         for elt in keyword.value.elts:
                             ret.append(_clean_setup_req(elt.s))
-    
-                    if keyword.arg=="requires":
-                        print "found requirements in setup.py 'requires' arg"
+
+                    if keyword.arg == "requires":
+                        print("found requirements in setup.py 'requires' arg")
                         for elt in keyword.value.elts:
                             ret.append(_clean_setup_req(elt.s))
-    
+
                     if keyword.arg == "extras_require":
-                        print "found requirements in setup.py 'extras_require' arg"
+                        print("found requirements in setup.py 'extras_require' arg")
                         for my_list in keyword.value.values:
                             for elt in my_list.elts:
                                 ret.append(_clean_setup_req(elt.s))
-    
+
         except AttributeError:
             continue
 
     return sorted(ret)
 
+
 class PythonStandardLibs():
 
     def __init__(self):
-    	self.url = "https://docs.python.org/2.7/py-modindex.html"
-    	self.data_dir = os.path.join(os.path.dirname(__file__), 
-           	                     "../../data")
+        self.url = "https://docs.python.org/2.7/py-modindex.html"
+        self.data_dir = os.path.join(os.path.dirname(__file__),
+                                     "../../data")
 
         self.pickle_path = os.path.join(self.data_dir,
                                         "python_standard_libs.pickle")
         self.libs = None
 
     def _mkdir(self):
-   	try:
+        try:
             os.makedirs(self.data_dir)
-    	except OSError as exp:
+        except OSError as exp:
             if exp.errno != errno.EEXIST:
-            	raise
-        self.pickle_path = os.path.join(self.data_dir, 
+                raise
+        self.pickle_path = os.path.join(self.data_dir,
                                         "python_standard_libs.pickle")
 
     def retrieve_from_web(self):
@@ -99,13 +102,13 @@ class PythonStandardLibs():
         with open(self.pickle_path, "w") as f:
             pickle.dump(self.libs, f)
 
-        print "saved these to file: {}".format(self.libs)
+        print("saved these to file: {}".format(self.libs))
 
     def get(self):
         if self.libs is None:
             try:
                 with open(self.pickle_path, "r") as f:
-                    print "Loading list of Stdandard Python Libraries from pickle file"
+                    print("Loading list of Stdandard Python Libraries from pickle file")
                     self.libs = pickle.load(f)
             except:
                 self.retrieve_from_web()
@@ -117,6 +120,7 @@ class PythonStandardLibs():
         except:
             pass
 
+
 def save_python_standard_libs(clean=False):
     pystdlibs = PythonStandardLibs()
     if clean:
@@ -126,5 +130,4 @@ def save_python_standard_libs(clean=False):
     # to show the thing works
     new_libs_obj = PythonStandardLibs()
     new_libs_obj.get()
-    print "got these from pickled file: {}".format(new_libs_obj.libs)
-
+    print("got these from pickled file: {}".format(new_libs_obj.libs))
