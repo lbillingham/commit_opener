@@ -5,9 +5,9 @@ import pandas as pd
 from shutil import rmtree
 
 
-from . grab_dependencies import get_dependencies
-from . tree_scrape import author_minded
-from . query_pmc import pmc_data as pubmed_data
+from commit_opener.grab_dependencies import get_dependencies
+from commit_opener.tree_scrape import author_minded
+from commit_opener.query_pmc import pmc_data as pubmed_data
 
 OUT_SUBFOLDER = 'contrib_data'
 AUTHOR_DATA = 'author_data.json'
