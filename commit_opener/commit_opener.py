@@ -63,6 +63,8 @@ def main(repo, out_dir, clobber_output, verbose):
     contributor_data = author_minded(repo)
     citation_data = pubmed_data('SPSS')
     depends_data = get_dependencies(repo_name, repo)
+    logging.info('got dependency data of type {}'.format(type(depends_data)))
+    logging.info('got dependency data:\n {}'.format(depends_data))
     logging.info("output path: %s" % os.path.join(out_dir,
                                                   'contributor_data.json'))
     contributor_data.to_json(os.path.join(out_dir,
