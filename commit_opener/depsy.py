@@ -99,7 +99,7 @@ class PythonStandardLibs():
             self.retrieve_from_web()
 
         self._mkdir()
-        with open(self.pickle_path, "w") as f:
+        with open(self.pickle_path, "wb") as f:
             pickle.dump(self.libs, f)
 
         print("saved these to file: {}".format(self.libs))
@@ -107,7 +107,7 @@ class PythonStandardLibs():
     def get(self):
         if self.libs is None:
             try:
-                with open(self.pickle_path, "r") as f:
+                with open(self.pickle_path, "rb") as f:
                     print("Loading list of Stdandard Python Libraries from pickle file")
                     self.libs = pickle.load(f)
             except:
