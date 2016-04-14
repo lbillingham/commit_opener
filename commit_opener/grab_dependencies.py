@@ -48,6 +48,10 @@ def get_dependencies(name, url):
         print("Repository has a setup.py file")
         filetext = catfile(myrepo.has("setup.py"))
         reqs = depsy.parse_setup_py(filetext)
+        if len(reqs) < 1:
+            print("No reqs in setup file,"
+                  "so determining dependencies ourselves.")
+            reqs = search_files_for_imports(myrepo)
     else:
         # No standard descriptions of the dependencies so let's try to work
         # them out for ourselves.
