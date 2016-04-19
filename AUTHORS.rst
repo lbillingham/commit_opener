@@ -9,7 +9,7 @@ Software Sustainability Institute Hackday 2016 Team
 * Laurence Billingham <laurence@bgs.ac.uk>
 * Martin Hammitzsch
 * Steve Harris
-* Craig MacLachlan
+* Craig MacLachlan <cs.maclachlan@gmail.com>
 
 Contributors
 ------------

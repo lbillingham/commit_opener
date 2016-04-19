@@ -1,8 +1,104 @@
 """
-Extract the dependencies from the repository 
+Extract the dependencies from the repository
 
 Issue:
 work out dependencies #3
 https://github.com/lbillingham/commit_opener/issues/3
 
+The key function is get_dependencies().
+
 """
+import re
+import os
+import pandas
+
+from commit_opener import depsy
+from commit_opener import repo
+
+def catfile(filename):
+    """Get text contents of a file."""
+
+    with open(filename, 'r') as fhandle:
+        print("Opening file {} and reading contents".format(filename))
+        text = fhandle.read()
+    return text
+
+
+def get_dependencies(name, url):
+    """
+    Get the dependecies for a git repository or any local python package.
+
+    """
+    # Let's instantiate the repo object, so we can parse through it.
+    myrepo = repo.Repo(name, url)
+    print("Created a repository instance for {}".format(url))
+
+    # Extract a local copy
+    myrepo.extract_local_copy()
+    print("Local copy now available here: {}".format(myrepo.tmpdir))
+    myrepo._get_filelist()
+
+    # Note: the file has to be opened and read before passing to depsy
+    # functions.
+    if myrepo.has("requirements.txt"):
+        print("Repository has a requirements.txt file")
+        filetext = catfile(myrepo.has("requirements.txt"))
+        reqs = depsy.parse_requirements_txt(filetext)
+    elif myrepo.has("setup.py"):
+        print("Repository has a setup.py file")
+        filetext = catfile(myrepo.has("setup.py"))
+        reqs = depsy.parse_setup_py(filetext)
+        if len(reqs) < 1:
+            print("No reqs in setup file,"
+                  "so determining dependencies ourselves.")
+            reqs = search_files_for_imports(myrepo)
+    else:
+        # No standard descriptions of the dependencies so let's try to work
+        # them out for ourselves.
+        print("No req or setup file, so determining dependencies ourselves.")
+        reqs = search_files_for_imports(myrepo)
+
+    # Convert the list of requirements to a set.
+    reqs = set(reqs)
+    print("Found the following imports: {}".format("\n".join(reqs)))
+
+    # Get the list of standard packages so that these can be removed.
+    stdlibs = depsy.PythonStandardLibs()
+    stdlibs.get()
+    set_std_libs = set(stdlibs.libs)
+
+
+    data = pandas.Series(list(reqs-set_std_libs))
+    data.sort_values(inplace=True)
+    return data
+
+
+
+def search_files_for_imports(repo_instance):
+    """
+    Walk all the python files in the repository and extract the import info.
+
+    """
+    dep_list = []
+    for f in repo_instance.file_list:
+        if ".py" in f:
+            print("Looking in {} for imports".format(os.path.basename(f)))
+            filetext = catfile(f)
+            dep_list.extend(find_imports(filetext))
+
+    return dep_list
+
+
+def find_imports(text):
+    """Apply regular expression searching to a file"""
+    # list of regexes.
+    reexps = [re.compile('^[\si]+mport\s+(\w+)[\s\.]', re.MULTILINE),
+              re.compile('^[\sf]+rom\s+(\w+)[\s\.]+', re.MULTILINE)
+              ]
+    import_list = []
+    for myregex in reexps:
+        try:
+            import_list.extend(re.findall(myregex, text))
+        except AttributeError:
+            pass
+    return import_list
